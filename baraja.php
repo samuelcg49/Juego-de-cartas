@@ -14,8 +14,10 @@
     <section>
         <!-- Lateral bar with buttons to select charts -->
         <aside>
-            <h3>Seleccione el nº de cartas y el nº de filas</h3>
+            <h3>Seleccione el nº de cartas y el nº de cartas por fila</h3>
 <?php
+    require ("./comun.php");
+
     if(isset($_POST['nc'])){} else {
         $_POST['cf'] = "0";
         $_POST['nc'] = "0";
@@ -48,12 +50,15 @@ printf("<form action='%s' method='POST'>", $_SERVER["PHP_SELF"]);
                 </select>
             </fieldset>
                 <br>
-            <input type="submit" name='Enviar' value='Enviar'>
+            <input type="submit" name='Enviar' value='Extraer cartas'>
 
          </form>
             <table>
                 <?php
                 var_dump($nc, $cf);
+
+
+
                 if ( empty($_POST['Enviar']) ){
 
                    printf("");
@@ -71,11 +76,15 @@ printf("<form action='%s' method='POST'>", $_SERVER["PHP_SELF"]);
                         do{
                             printf("<tr>");
                                         for($i = 0; $i < $cf ; $i++){
+
+                                                $aleat1 = rand(1, 10-1);
+                                                $aleat2 = rand(1, 4-1);
+
                                             if($contador2 >= $nc){
                                                 printf("");
                                             }else {
                                                 $contador2++;
-                                                printf("<td>Carta %s</td>", $contador2);
+                                                printf("<td> %s de %s</td>", $cartas[0][$aleat1], $cartas[1][$aleat2]);
                                             }
                                         }
                             printf("</tr>", $contador+1);
