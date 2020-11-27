@@ -1,0 +1,20 @@
+body{
+
+}
+
+h1{
+    text-align: center;
+}
+
+aside{
+    width: 400px;
+    height: 100vh;
+}
+
+aside h3{
+    text-align: center;
+}
+
+#cartas table, td, tr{
+    border: 1px solid black;
+}
