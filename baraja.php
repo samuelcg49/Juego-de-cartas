@@ -10,92 +10,123 @@
 </head>
 <body>
 
-    <h1>BENVENIDO AL JUEGO DE CARTAS </h1>
-    <section>
-        <!-- Lateral bar with buttons to select charts -->
-        <aside>
-            <h3>Seleccione el nº de cartas y el nº de cartas por fila</h3>
-<?php
-    require ("./comun.php");
+<h1>BENVENIDO AL JUEGO DE CARTAS </h1>
+<section>
+    <!-- Lateral bar with buttons to select charts -->
+    <aside>
+        <h3>Seleccione el nº de cartas y el nº de cartas por fila</h3>
+        <?php
+        require ("./comun.php");
 
-    if(isset($_POST['nc'])){} else {
-        $_POST['cf'] = "0";
-        $_POST['nc'] = "0";
-    }
-    $cf = $_POST["cf"];
-    $nc = $_POST["nc"];
-printf("<form action='%s' method='POST'>", $_SERVER["PHP_SELF"]);
-?>
-            <fieldset>
-                <label for="nc">Nº de cartas</label>
-                <select name="nc" id="nc">
-                    <?php
-                        for($i = 1; $i <= 12 ; $i++){
-                            printf("<option value='%d'", $i); if($i == $nc) printf("selected");
-                            printf("> %s </option>",$i);
-                        }
-                    ?>
-                </select>
-            </fieldset>
-                <br>
-            <fieldset>
-                <label for="cf">Nº de cartas por fila</label>
-                <select name="cf" id="cf">
-                    <?php
-                    for($i = 1; $i <= 10 ; $i++){
-                        printf("<option value='%d'", $i); if($i == $cf) printf("selected");
-                        printf("> %s </option>",$i);
-                    }
-                    ?>
-                </select>
-            </fieldset>
-                <br>
-            <input type="submit" name='Enviar' value='Extraer cartas'>
-
-         </form>
-            <table>
+        if(isset($_POST['nc'])){} else {
+            $_POST['cf'] = "0";
+            $_POST['nc'] = "0";
+        }
+        $cf = $_POST["cf"];
+        $nc = $_POST["nc"];
+        printf("<form action='%s' method='POST'>", $_SERVER["PHP_SELF"]);
+        ?>
+        <fieldset>
+            <label for="nc">Nº de cartas</label>
+            <select name="nc" id="nc">
                 <?php
-                var_dump($nc, $cf);
-
-
-
-                if ( empty($_POST['Enviar']) ){
-
-                   printf("");
-
-                }else {
-                    if ($cf > $nc) {
-                        printf("<h2>El nº de cartas por fila debe ser menor o igual que el nº de cartas elegido</h2>");
-                    } else {
-                        $cf = $_POST["cf"];
-                        $nc = $_POST["nc"];
-
-                        $contador = 0;
-                        $contador2 = 0;
-
-                        do{
-                            printf("<tr>");
-                                        for($i = 0; $i < $cf ; $i++){
-
-                                                $aleat1 = rand(1, 10-1);
-                                                $aleat2 = rand(1, 4-1);
-
-                                            if($contador2 >= $nc){
-                                                printf("");
-                                            }else {
-                                                $contador2++;
-                                                printf("<td> %s de %s</td>", $cartas[0][$aleat1], $cartas[1][$aleat2]);
-                                            }
-                                        }
-                            printf("</tr>", $contador+1);
-                            $contador++;
-
-                        }while(round($nc / $cf)+1 != $contador);
-                    }
+                for($i = 1; $i <= 12 ; $i++){
+                    printf("<option value='%d'", $i); if($i == $nc) printf("selected");
+                    printf("> %s </option>",$i);
                 }
                 ?>
-            </table>
-        </aside>
-    </section>
+            </select>
+        </fieldset>
+        <br>
+        <fieldset>
+            <label for="cf">Nº de cartas por fila</label>
+            <select name="cf" id="cf">
+                <?php
+                for($i = 1; $i <= 10 ; $i++){
+                    printf("<option value='%d'", $i); if($i == $cf) printf("selected");
+                    printf("> %s </option>",$i);
+                }
+                ?>
+            </select>
+        </fieldset>
+        <br>
+        <input type="submit" name='Enviar' value='Extraer cartas'>
+
+        </form>
+        <br>
+
+        <?php
+
+        if ( empty($_POST['Enviar']) ){
+
+            printf("");
+
+        }else {
+            reparteCartas($cf, $nc);
+
+        }
+
+
+        function reparteCartas($cf, $nc){
+            global $cartas;
+
+            if ($cf > $nc) {
+                printf("<h2>El nº de cartas por fila debe ser menor o igual que el nº de cartas elegido. </h2>");
+            } else {
+
+                printf("<table>");
+
+                $contador = 0;
+                $contador2 = 0;
+
+                do{
+                    printf("<tr>");
+                    for($i = 0; $i < $cf ; $i++){
+
+                        $aleat1 = rand(0, 9);
+                        $aleat2 = rand(1, 4);
+
+                        if($contador2 >= $nc){
+                            printf("");
+                        }else {
+
+                            $nombreFichero = imagenDeCarta($aleat1, $aleat2);
+                            $nombreCarta = cartaConLetra($aleat1, $aleat2);
+                            $contador2++;
+
+                            printf("<td>");
+                            printf("<img src='$nombreFichero'>");
+                            printf("<br>");
+                            printf("<p>$nombreCarta</p>");
+                            printf("</td>");
+
+                        }
+                    }
+                    printf("</tr>");
+                    $contador++;
+
+                }while(ceil($nc / $cf) != $contador);
+
+                printf("</table");
+            }
+        }
+
+        function imagenDeCarta($aleat1, $aleat2){
+            $nombreFichero = "./images/carta$aleat2$aleat1.png";
+
+            return $nombreFichero;
+        }
+
+        function cartaConLetra($aleat1, $aleat2){
+            global $cartas;
+            $nombreCarta = $cartas[0][$aleat1] ." de " . $cartas[1][$aleat2];
+
+            return $nombreCarta;
+        }
+
+        ?>
+
+    </aside>
+</section>
 </body>
 </html>
