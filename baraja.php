@@ -69,6 +69,7 @@
 
         function reparteCartas($cf, $nc){
             global $cartas;
+            global $controlCartas;
 
             if ($cf > $nc) {
                 printf("<h2>El nº de cartas por fila debe ser menor o igual que el nº de cartas elegido. </h2>");
@@ -79,36 +80,66 @@
                 $contador = 0;
                 $contador2 = 0;
 
-                do{
+
+                do {
                     printf("<tr>");
-                    for($i = 0; $i < $cf ; $i++){
+                    for ($i = 0; $i < $cf; $i++) {
 
                         $aleat1 = rand(0, 9);
                         $aleat2 = rand(1, 4);
+                        $control = $aleat1 . $aleat2;
 
-                        if($contador2 >= $nc){
-                            printf("");
-                        }else {
+                        if (in_array($control, $controlCartas)) {
 
-                            $nombreFichero = imagenDeCarta($aleat1, $aleat2);
-                            $nombreCarta = cartaConLetra($aleat1, $aleat2);
-                            $contador2++;
+                            do{
+                                $aleat1 = rand(0, 9);
+                                $aleat2 = rand(1, 4);
+                                $control = $aleat1 . $aleat2;
+                            }while(in_array($control, $controlCartas));
 
-                            printf("<td>");
-                            printf("<img src='$nombreFichero'>");
-                            printf("<br>");
-                            printf("<p>$nombreCarta</p>");
-                            printf("</td>");
+                            if ($contador2 >= $nc) {
+                                printf("");
+                            } else {
 
+                                $nombreFichero = imagenDeCarta($aleat1, $aleat2);
+                                $nombreCarta = cartaConLetra($aleat1, $aleat2);
+                                $contador2++;
+
+                                printf("<td>");
+                                printf("<img src='$nombreFichero'>");
+                                printf("<br>");
+                                printf("<p>$nombreCarta</p>");
+                                printf("</td>");
+
+                                array_push($controlCartas, $control);
+                            }
+
+                        } else {
+                            if ($contador2 >= $nc) {
+                                printf("");
+                            } else {
+
+                                $nombreFichero = imagenDeCarta($aleat1, $aleat2);
+                                $nombreCarta = cartaConLetra($aleat1, $aleat2);
+                                $contador2++;
+
+                                printf("<td>");
+                                printf("<img src='$nombreFichero'>");
+                                printf("<br>");
+                                printf("<p>$nombreCarta</p>");
+                                printf("</td>");
+
+                                array_push($controlCartas, $control);
+                            }
                         }
                     }
-                    printf("</tr>");
-                    $contador++;
+                        printf("</tr>");
+                        $contador++;
 
-                }while(ceil($nc / $cf) != $contador);
+                }while (ceil($nc / $cf) != $contador) ;
 
-                printf("</table");
-            }
+                    printf("</table");
+                }
         }
 
         function imagenDeCarta($aleat1, $aleat2){

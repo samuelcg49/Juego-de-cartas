@@ -5,6 +5,6 @@ $cartas = array(
     array ("", "Espadas", "Oros", "Copas", "Bastos")
 );
 
-
+$controlCartas = array();
 
 ?>
